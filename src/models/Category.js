@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+    const Category = sequelize.define('Category', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -7,27 +7,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        role: {
-            type: DataTypes.ENUM,
-            allowNull: false,
-            values: ['admin','user'],
-            defaultValue: 'user'
-        },
-        avatar: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            
         },
         createdAt: {
             field: 'created_at',
@@ -45,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         }
     },{
-        tableName: 'users',
+        tableName: 'categories',
         timestamps: true,
         paranoid: true
     });
-    return User;
+    return Category;
 }
