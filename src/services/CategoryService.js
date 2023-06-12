@@ -26,7 +26,7 @@ const CategoryService = {
             return {
                 code: 200,
                 message: 'Success',
-                data: await CategoryRepository.getCategoryById(),
+                data: await CategoryRepository.getCategoryById(id),
             }
         }else{
             return {
