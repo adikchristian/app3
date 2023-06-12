@@ -8,6 +8,7 @@ var indexRouter = require('./src/routes/index');
 var usersRouter = require('./src/routes/users');
 var categoryRouter = require('./src/routes/categories');
 var productRouter = require('./src/routes/products');
+var refreshTokenRouter = require('./src/routes/refreshToken');
 
 var app = express();
 
@@ -21,5 +22,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoryRouter);
 app.use('/products', productRouter);
+app.use('/refresh-token', refreshTokenRouter);
 
 module.exports = app;
