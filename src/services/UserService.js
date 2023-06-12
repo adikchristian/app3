@@ -1,4 +1,13 @@
 const UserRepository = require("../repositories/UserRepository");
+const refreshTokenRepository = require('../repositories/RefreshTokenRepository');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const {
+  JWT_SECRET,
+  JWT_SECRET_REFRESH_TOKEN,
+  JWT_ACCESS_TOKEN_EXPIRED,
+  JWT_REFRESH_TOKEN_EXPIRED
+} = process.env;
 
 const UserService = {
   async getAllUsers() {
@@ -134,6 +143,48 @@ const UserService = {
       };
     }
   },
+
+  async loginUser(email, password){
+    console.log(email);
+    const user = await UserRepository.getUserByEmail(email);
+
+    if(!user){
+      return {
+        code: 400,
+        message: 'Invalid Email or Password',
+        data: null,
+      }
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if(!isValidPassword){
+      return {
+        code: 400,
+        message: 'Invalid Email or Password',
+        data: null,
+      }
+    }
+
+    const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_ACCESS_TOKEN_EXPIRED });
+    const refreshToken = jwt.sign({ user }, JWT_SECRET_REFRESH_TOKEN, { expiresIn: JWT_REFRESH_TOKEN_EXPIRED });
+
+    const dataToken = {
+      token: refreshToken,
+      userId: user.id,
+    }
+
+    await refreshTokenRepository.create(dataToken);
+
+    return{
+      code: 200,
+      message: 'Login Success',
+      data: {
+        user,
+        access_token: token,
+        refersh_token: refreshToken,
+      }
+    }
+  }
 };
 
 module.exports = UserService;

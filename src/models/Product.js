@@ -1,33 +1,39 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+    const Product = sequelize.define('Product', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             allowNull: false,
         },
-        name: {
+        categoryId:{
+            field:'category_id',
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        title: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        email: {
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+        author: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        password: {
+        publisher: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        role: {
-            type: DataTypes.ENUM,
+        stock: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-            values: ['admin','user'],
-            defaultValue: 'user'
         },
-        avatar: {
+        cover: {
             type: DataTypes.STRING,
             allowNull: true,
-            
         },
         createdAt: {
             field: 'created_at',
@@ -45,9 +51,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         }
     },{
-        tableName: 'users',
+        tableName: 'products',
         timestamps: true,
-        paranoid: true
+        paranoid: true,
     });
-    return User;
+    Product.associate = function(models){
+        Product.belongsTo(models.Category, {foreginKey: 'category_id', as:'category'});
+    }
+    return Product;
 }

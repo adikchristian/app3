@@ -81,6 +81,25 @@ const UserController = {
         const user = await UserService.deleteUser(id);
         res.status(user.code).json(user);
     },
+
+    async login(req, res){
+        const schema = {
+            email: 'email|empty:false',
+            password: 'string|min:6'
+        }
+
+        const validate = v.validate(req.body, schema);
+        if(validate.length){
+            res.json({
+                code: 400,
+                message: 'Validator Error 1212',
+                data: validate,
+            })
+        }
+
+        const loginUser = await UserService.loginUser(req.body.email, req.body.password);
+        res.status(loginUser.code).json(loginUser);
+    }
 }
 
 module.exports = UserController;
